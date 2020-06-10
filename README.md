@@ -47,9 +47,14 @@ pip3 install -r requirements.txt
 **To run the batch script**
 
 ```bash
+# Command line help on the arguments
+python3 stats.py run --help
+
+# Shows the DAG
 python3 stats.py show
+
+# Running on the hourly file 1 day ago
 python3 stats.py run --domains '["it", "ca"]'
-jupyter-notebook stats.ipynb
 ```
 See also [GitHub Actions logs](https://github.com/mycaule/dz-assessment/actions)
 
