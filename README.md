@@ -28,7 +28,7 @@ Using the fact that we can read the stream of gzipped pageviews already sorted b
 
 We make further investigations using Pandas in a [Jupyter Notebook](notebook.ipynb) and finally choose a simple derived implementation using Metaflow in Python.
 
-This approach is more pragmatic that Spark, which would be required to compute analytics other long period of time.
+This approach is more pragmatic that Spark, which would be required to compute analytics other long period of time. Wikimedia [says they compute their analytics using Hadoop](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews) and provide similar functionality to this exercise in a REST API.
 
 Metaflow presents multiple advantages in Data Science workflows and also gives interesting abstractions to go from the desktop computer to AWS using S3, Batch and Step Functions.
 
