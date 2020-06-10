@@ -1,22 +1,17 @@
-from metaflow import FlowSpec, step, Parameter
+from metaflow import FlowSpec, step, Parameter, JSONType
 import datetime
 import re
-import os
 import pandas
+import filereader
 
 
-def script_path(filename):
-    "Gets the absolute path of a file"
-    filepath = os.path.join(os.path.dirname(__file__))
-    return os.path.join(filepath, filename)
-
-
-def read_log(filename):
+def read_log(filename, folder, domains):
     """Failsafe way to read CSV"""
-    df = pandas.read_csv(script_path(filename), sep='|', usecols=[
-                         0, 1, 2], names=['title', 'user_id', 'domain'])
-    # pandas.read_csv(pageviews_file, compression='gzip', sep=' ', usecols=[
-    #                 0, 1, 2], names=['domain', 'title', 'views'])
+    df = pandas.read_csv(filereader.script_path(filename, folder),
+                         compression='gzip', sep=' ', usecols=[0, 1, 2],
+                         names=['domain', 'title', 'views'])
+    filter = df.domain.isin(domains)
+    df = df.loc[filter]
     return df.dropna(thresh=3)
 
 
@@ -30,38 +25,46 @@ class PageViewsStatsFlow(FlowSpec):
     3) Compute top K elements for each group
     4) Save a dictionary of group specific statistics
     """
-    group = Parameter("group", help="Group by", default="domain")
+
+    domains = Parameter("domains", help="List of domains to compute",
+                        type=JSONType, default='["fr", "en"]')
     k = Parameter("k", help="Maximum number of top elements", default=25)
+    date = Parameter("date", help="Date to fetch the data from",
+                     default="20200601")
+    hour = Parameter("hour", help="Hour of the day", default="00")
+    folder = Parameter("folder", help="Folder with the hourly dumps",
+                       default="data")
 
     @step
     def start(self):
         """
         The start step:
         1) Loads the listening metadata into pandas dataframe
-        2) Finds all the unique countries and users
+        2) Finds all the unique domains
         3) Launches parallel statistics computation for each domain
         """
-        COLS = ['title', 'user_id', 'domain']
-        td = datetime.datetime(2020, 2, 23, 0, 0)  # datetime.datetime.today()
-        lastWeek = ["pageviews-%s.log" %
-                    (td - datetime.timedelta(i)).strftime('%Y%m%d') for i in range(7)]
+        td = datetime.datetime(2020, 6, 1, 0, 0)  # datetime.datetime.today()
 
-        df0 = pandas.DataFrame(columns=['title', 'user_id', 'domain', 'pageviews'])
-        for pfile in os.listdir(script_path('.')):
-            dateSearch = re.search('pageviews-\d{4}\d{2}\d{2}.log', pfile)
-            if dateSearch:
-                dateFound = dateSearch.group(0)
-                if dateFound in lastWeek:
-                    df = read_log(dateFound)
-                    df = df.groupby(['title', 'user_id', 'domain']
-                                    ).size().reset_index(name='pageviews')
-                    df0 = df0.append(df, sort=False)
+        # TESTME
+        last_week = ["pageviews-%s-020000.gz" %
+                     (td - datetime.timedelta(i)).strftime('%Y%m%d')
+                     for i in range(7)]
+        # FIXME past 24 hours of last day
 
-        self.dataframe = df0
+        df = pandas.DataFrame(columns=['domain', 'title', 'views'])
+        for f in filereader.list_dir(self.folder):
+            d_search = re.search('pageviews-\\d{4}\\d{2}\\d{2}-020000.gz', f)
+            if d_search:
+                d_found = d_search.group(0)
+                if d_found in last_week:
+                    df = df.append(read_log(d_found, self.folder,
+                                            self.domains), sort=False)
 
+        self.dataframe = df
         # Compute statistics for each group in parallel (fan-out)
-        self.groups = self.dataframe[self.group].unique()
-        self.next(self.compute_statistics, foreach='groups')
+        print(len(self.dataframe.index))
+
+        self.next(self.compute_statistics, foreach='domains')
 
     @step
     def compute_statistics(self):
@@ -69,12 +72,14 @@ class PageViewsStatsFlow(FlowSpec):
         self.element = self.input
         print("Computing statistics for %s" % self.element)
 
-        # Find all the songs related to this group
-        selector = self.dataframe[self.group] == self.element
-        self.dataframe = self.dataframe.loc[selector]
-        self.dataframe = self.dataframe.groupby(['title'])['pageviews'].sum().reset_index()
+        # Find all the rows related to this domain
+        filter = self.dataframe.domain == self.element
+        self.dataframe = self.dataframe.loc[filter]
 
-        self.top_k = self.dataframe.nlargest(self.k, ['pageviews'])
+        self.dataframe = self.dataframe.groupby(
+            ['title'])['views'].sum().reset_index()
+
+        self.top_k = self.dataframe.nlargest(self.k, ['views'])
         self.next(self.join)
 
     @step
@@ -88,12 +93,16 @@ class PageViewsStatsFlow(FlowSpec):
     @step
     def write_top_k(self):
         "Writes the top K to a text file"
-        data = [(element, data['top_k'][['title', 'pageviews']].to_dict('split')['data'])
+        data = [(element,
+                 data['top_k'][['title', 'views']].to_dict('split')['data'])
                 for element, data in self.element_stats.items()]
 
-        pandas.DataFrame([[element, ','.join([d[0]+':'+str(d[1]) for d in data2])]
-                          for element, data2 in data]).to_csv(script_path('%s_top_%s_20200221.csv' % (self.group, self.k)),
-                                                              sep='|', header=False, index=False)
+        pandas.DataFrame([[element, d[0], d[1]] for element, data2 in data
+                          for d in data2]).to_csv(
+            filereader.script_path('%s_top_%s_%s%s0000.csv' %
+                                   ('domain', self.k, self.date, self.hour),
+                                   self.folder),
+            sep=' ', header=False, index=False)
 
         self.next(self.end)
 

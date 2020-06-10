@@ -8,6 +8,30 @@
   <br>
 </p>
 
+### Observations
+
+Some GNU utils that can solve the problem [with the command line](basic_script.sh).
+
+```bash
+# downloading a file
+wget https://dumps.wikimedia.org/other/pageviews/2020/2020-06/pageviews-20200601-020000.gz -P data
+# about 1500 different domains
+
+# list of unique domains
+zcat pageviews-20200601-020000.gz | awk '{print $1}' | uniq
+
+# top 25 results for fr
+zcat pageviews-20200601-020000.gz | grep -E '^fr ' | grep -vF -f blacklist_domains_and_pages | sort -nrk3,3 | head -25 | awk '{print $2" "$3}'
+```
+
+Using the fact that we can read the stream of gzipped pageviews already sorted by domains, this should be the fastest way and can be optimized running between multiple core using GNU Parallel.
+
+We make further investigations using Pandas in a [Jupyter Notebook](notebook.ipynb) and finally choose a simple derived implementation using Metaflow in Python.
+
+This approach is more pragmatic that Spark, which would be required to compute analytics other long period of time.
+
+Metaflow presents multiple advantages in Data Science workflows and also gives interesting abstractions to go from the desktop computer to AWS using S3, Batch and Step Functions.
+
 ### Pre-requisites
 
 Create a virtual environment with all the python packages required.
@@ -24,7 +48,7 @@ pip3 install -r requirements.txt
 
 ```bash
 python3 stats.py show
-python3 stats.py run --group country
+python3 stats.py run --domains '["it", "ca"]'
 jupyter-notebook stats.ipynb
 ```
 See also [GitHub Actions logs](https://github.com/mycaule/dz-assessment/actions)
