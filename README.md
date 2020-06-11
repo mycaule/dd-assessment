@@ -10,7 +10,8 @@
 
 ### Observations
 
-Some GNU utils that can solve the problem [with the command line](basic_script.sh).
+https://en.wikipedia.org/wiki/External_sorting
+Some GNU utils that can solve the problem [with the command line](bash/basic_script.sh).
 
 ```bash
 # downloading a file
@@ -26,13 +27,36 @@ zcat pageviews-20200601-020000.gz | grep -E '^fr ' | grep -vF -f blacklist_domai
 
 Using the fact that we can read the stream of gzipped pageviews already sorted by domains, this should be the fastest way and can be optimized running between multiple core using GNU Parallel.
 
+TODO add some ASCIInema screenshots
+
+Watching the output file writing using tail.
+
+Testing using [`bats`](https://github.com/sstephenson/bats)
+
 We make further investigations using Pandas in a [Jupyter Notebook](notebook.ipynb) and finally choose a simple derived implementation using Metaflow in Python.
 
 This approach is more pragmatic that Spark, which would be required to compute analytics other long period of time. Wikimedia [says they compute their analytics using Hadoop](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews) and provide similar functionality to this exercise in a REST API.
 
 Metaflow presents multiple advantages in Data Science workflows and also gives interesting abstractions to go from the desktop computer to AWS using S3, Batch and Step Functions.
 
-### Pre-requisites
+### Bash solution
+
+```bash
+cd bash
+
+./bash_script.sh 2020 06 01 00
+
+./bash_script.sh
+```
+
+Running tests
+```bash
+bats wikipedia.bats
+```
+
+### Python solution
+
+*Pre-requisites*
 
 Create a virtual environment with all the python packages required.
 
@@ -42,11 +66,11 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
-### Exercise
-
 **To run the batch script**
 
 ```bash
+cd python
+
 # Command line help on the arguments
 python3 stats.py run --help
 
@@ -56,7 +80,19 @@ python3 stats.py show
 # Running on the hourly file 1 day ago
 python3 stats.py run --domains '["it", "ca"]'
 ```
+
+Running tests
+```bash
+python3 tests.py
+```
+
 See also [GitHub Actions logs](https://github.com/mycaule/dz-assessment/actions)
+
+### Scala solution
+
+```bash
+cd scala
+```
 
 ### References
 

@@ -63,7 +63,7 @@ class PageViewsStatsFlow(FlowSpec):
         self.dataframe = df
         # Compute statistics for each group in parallel (fan-out)
         print(len(self.dataframe.index))
-
+        print(self.dataframe)
         self.next(self.compute_statistics, foreach='domains')
 
     @step
@@ -75,10 +75,10 @@ class PageViewsStatsFlow(FlowSpec):
         # Find all the rows related to this domain
         filter = self.dataframe.domain == self.element
         self.dataframe = self.dataframe.loc[filter]
-
+        print(self.dataframe)
         self.dataframe = self.dataframe.groupby(
             ['title'])['views'].sum().reset_index()
-
+        print(self.dataframe)
         self.top_k = self.dataframe.nlargest(self.k, ['views'])
         self.next(self.join)
 
@@ -88,6 +88,7 @@ class PageViewsStatsFlow(FlowSpec):
         self.element_stats = {
             inp.element: {'top_k': inp.top_k} for inp in inputs
         }
+
         self.next(self.write_top_k)
 
     @step
