@@ -56,6 +56,8 @@ bats wikipedia.bats
 
 ### Python solution
 
+[Colab notebook](https://colab.research.google.com/drive/1VJk8rqx0pWe4KkqmjQ63ILQdjoLqrZ3M?usp=sharing)
+
 *Pre-requisites*
 
 Create a virtual environment with all the python packages required.
@@ -89,6 +91,8 @@ python3 tests.py
 See also [GitHub Actions logs](https://github.com/mycaule/dz-assessment/actions)
 
 ### Scala solution
+
+[Databricks notebook](https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/3675239947483677/1559863225658641/3923561340607708/latest.html)
 
 ```bash
 cd scala
