@@ -15,7 +15,7 @@ case class FetchFilesTask(storage: LocalStorage, date: LocalDateTime) extends Ru
     val url1 = s"https://s3.amazonaws.com/dd-interview-data/data_engineer/wikipedia/blacklist_domains_and_pages"
 
     val pvStr = FileDownloader.pageviewString(date)
-    val url2 = s"https://dumps.wikimedia.org/other/pageviews/$pvStr"
+    val url2 = s"https://dumps.wikimedia.org/other/$pvStr"
 
     val d1 = FileDownloader.downloadTo(url1, storage.blacklist)
     val d2 = FileDownloader.downloadTo(url2, storage.pageviews)

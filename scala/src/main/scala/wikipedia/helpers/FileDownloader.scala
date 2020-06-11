@@ -1,11 +1,12 @@
 package wikipedia
 package helpers
 
+import scala.language.postfixOps
 import sys.process._
 import java.net.URL
 import java.io.File
 import java.time.LocalDateTime
-import scala.util.Try
+import scala.util.{ Try, Success, Failure }
 
 object FileDownloader {
   def pageviewString(date: LocalDateTime): String = {
@@ -18,7 +19,14 @@ object FileDownloader {
     s"pageviews/$year/$year-${month}/pageviews-${datetime}.gz"
   }
 
-  def downloadTo(url: String, filename: String): Try[String] =
-    Try(new URL(url) #> new File(filename) !!)
+  def downloadTo(url: String, filename: String): Try[String] = {
+    val tUrl = Try(new URL(url))
+    val tFile = Try(new File(filename))
 
+    (tUrl, tFile) match {
+      case (Success(v1), Success(v2)) => Try(v1 #> v2 !!)
+      case (Failure(f1), _)           => Failure(f1)
+      case (_, Failure(f2))           => Failure(f2)
+    }
+  }
 }

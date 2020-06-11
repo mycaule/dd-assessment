@@ -102,5 +102,12 @@ See also [GitHub Actions logs](https://github.com/mycaule/dz-assessment/actions)
 
 ```bash
 cd scala
+sbt run
+# or
+sbt run 2020 06 01 00
 ```
 
+Running the tests
+```bash
+sbt test
+```

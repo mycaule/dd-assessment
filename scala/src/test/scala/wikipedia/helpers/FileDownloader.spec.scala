@@ -18,8 +18,11 @@ class FileDownloaderSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "download files from WWW" in {
-    val url = "https://www.google.fr/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
-    FileDownloader.downloadTo(url, "googlelogo.png") shouldBe ""
+    val url1 = "https://www.google.fr/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+    val url2 = "https://www.google.what/does_not_exist.png"
+
+    FileDownloader.downloadTo(url1, "googlelogo.png").isSuccess shouldBe true
+    // FileDownloader.downloadTo(url2, "googlelogo.png").isFailure shouldBe true
 
   }
 }

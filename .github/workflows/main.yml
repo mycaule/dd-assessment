@@ -21,7 +21,7 @@ jobs:
         cd python
         python tests.py
         python stats.py show
-        python stats.py run
+        # python stats.py run
         cd ..
 
     - name: Set up JDK 1.8
