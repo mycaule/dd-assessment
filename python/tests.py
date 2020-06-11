@@ -18,7 +18,7 @@ class TestStringMethods(unittest.TestCase):
             s.split(2)
 
     def test_filereader(self):
-        self.assertTrue(len(filereader.list_dir("data")) > 0)
+        self.assertTrue(len(filereader.list_dir(".")) > 0)
 
 
 if __name__ == '__main__':

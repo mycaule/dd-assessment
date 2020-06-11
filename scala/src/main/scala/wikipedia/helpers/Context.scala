@@ -1,21 +1,16 @@
 package wikipedia
-package models
+package helpers
 
 import org.apache.spark.sql.SparkSession
 
 object Context {
-  def getOrCreateSession() = {
+  def getOrCreateSession() =
     SparkSession.builder()
       .config("spark.ui.showConsoleProgress", "true")
       .master("local[*]")
-      .appName("Wikipedia")
+      .appName("wikipedia")
       .getOrCreate()
-  }
 
   def closeAllSessions() =
     SparkSession.getActiveSession.foreach(_.close())
-}
-
-case class Context(session: SparkSession) {
-  val implicits = session.implicits
 }
