@@ -80,7 +80,7 @@ python3 stats.py run --help
 python3 stats.py show
 
 # Running on the hourly file 1 day ago
-python3 stats.py run --domains '["it", "ca"]'
+python3 stats.py run --domains '["zu", "zu.d", "zu.m"]'
 ```
 
 Running tests

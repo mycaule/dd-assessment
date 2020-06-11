@@ -46,14 +46,14 @@ class PageViewsStatsFlow(FlowSpec):
         td = datetime.datetime(2020, 6, 1, 0, 0)  # datetime.datetime.today()
 
         # TESTME
-        last_week = ["pageviews-%s-020000.gz" %
+        last_week = ["pageviews-%s-010000.gz" %
                      (td - datetime.timedelta(i)).strftime('%Y%m%d')
                      for i in range(7)]
         # FIXME past 24 hours of last day
 
         df = pandas.DataFrame(columns=['domain', 'title', 'views'])
         for f in filereader.list_dir(self.folder):
-            d_search = re.search('pageviews-\\d{4}\\d{2}\\d{2}-020000.gz', f)
+            d_search = re.search('pageviews-\\d{4}\\d{2}\\d{2}-010000.gz', f)
             if d_search:
                 d_found = d_search.group(0)
                 if d_found in last_week:
@@ -62,8 +62,6 @@ class PageViewsStatsFlow(FlowSpec):
 
         self.dataframe = df
         # Compute statistics for each group in parallel (fan-out)
-        print(len(self.dataframe.index))
-        print(self.dataframe)
         self.next(self.compute_statistics, foreach='domains')
 
     @step
