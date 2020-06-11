@@ -1,4 +1,6 @@
 *
 !.gitignore
-# small file for tests
-!pageviews-20200601-010000.gz
+
+# small files for tests
+!pageviews-test.gz
+!blacklist-test
