@@ -17,8 +17,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install metaflow pandas matplotlib notebook
     - name: Run tests
-      run: python tests.py
+      run: |
+        cd python
+        python tests.py
+        cd ..
     - name: Check metaflows
       run: |
+        cd python
         python stats.py show
         python stats.py run
+        cd ..
