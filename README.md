@@ -50,7 +50,7 @@ Running tests with [`bats`](https://github.com/sstephenson/bats).
 bats tests.bats
 ```
 
-runs in about half an hour
+- runs in about half an hour
 - can be optimized by splitting the file and using [GNU parallel](https://www.gnu.org/software/parallel/) to take full advantage of multi-core processing.
 
 ### Python solution
@@ -97,7 +97,7 @@ python3 tests.py
 
 See also [GitHub Actions logs](https://github.com/mycaule/dz-assessment/actions)
 
-runs in about an hour in the default Google Colab instance.
+- runs in about an hour in the default Google Colab instance.
 
 **References**
 
@@ -126,6 +126,6 @@ Running the tests
 sbt test
 ```
 
-Going further in the production would require doing more work in the packaging for the archive, and configuring EMR or Dataproc to submit the job.
+Going further in the production would require doing more work in the packaging for the archive, and configuring EMR or Dataproc to submit the job. AWS Step Functions and GCP Cloud Composer are also solutions to schedule the job in production.
 
-- runs in about a minute on the default databricks cluster
+- runs in about a minute on the default Databricks cluster
