@@ -13,7 +13,7 @@ jobs:
     - name: Test
       run: |
         cd bash
-        bats wikipedia.bats
+        bats tests.bats
         cd ..
 
     - name: Set up Python 3.8

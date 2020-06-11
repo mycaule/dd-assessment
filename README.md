@@ -11,7 +11,7 @@
 ### Observations
 
 https://en.wikipedia.org/wiki/External_sorting
-Some GNU utils that can solve the problem [with the command line](bash/basic_script.sh).
+Some GNU utils that can solve the problem [with the command line](bash/run.sh).
 
 ```bash
 # downloading a file
@@ -44,9 +44,9 @@ Metaflow presents multiple advantages in Data Science workflows and also gives i
 ```bash
 cd bash
 
-./bash_script.sh 2020 06 01 00
-
-./bash_script.sh
+./run.sh
+# or
+./run.sh 2020 06 01 00
 ```
 
 Running tests
