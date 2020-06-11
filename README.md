@@ -68,7 +68,7 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
-**To run the batch script**
+**To run the workflow**
 
 ```bash
 cd python
@@ -90,6 +90,12 @@ python3 tests.py
 
 See also [GitHub Actions logs](https://github.com/mycaule/dz-assessment/actions)
 
+
+**References**
+
+- [Netflix - Open-Sourcing Metaflow, a Human-Centric Framework for Data Science](https://netflixtechblog.com/open-sourcing-metaflow-a-human-centric-framework-for-data-science-fa72e04a5d9)
+  - [`Netflix/metaflow/tutorials/02-statistics`](https://github.com/Netflix/metaflow/tree/master/metaflow/tutorials/02-statistics)
+
 ### Scala solution
 
 [Databricks notebook](https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/3675239947483677/1559863225658641/3923561340607708/latest.html)
@@ -98,7 +104,3 @@ See also [GitHub Actions logs](https://github.com/mycaule/dz-assessment/actions)
 cd scala
 ```
 
-### References
-
-- [Netflix - Open-Sourcing Metaflow, a Human-Centric Framework for Data Science](https://netflixtechblog.com/open-sourcing-metaflow-a-human-centric-framework-for-data-science-fa72e04a5d9)
-  - [`Netflix/metaflow/tutorials/02-statistics`](https://github.com/Netflix/metaflow/tree/master/metaflow/tutorials/02-statistics)
