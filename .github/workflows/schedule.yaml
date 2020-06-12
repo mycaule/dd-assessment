@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Run a multi-line script
+    - name: Compute most visited
       run: |
         cd bash
         ./run.sh
