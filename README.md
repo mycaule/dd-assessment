@@ -95,7 +95,7 @@ Running tests
 python3 tests.py
 ```
 
-See also [GitHub Actions logs](https://github.com/mycaule/dz-assessment/actions)
+See also [GitHub Actions logs](https://github.com/mycaule/dd-assessment/actions)
 
 - runs in about an hour in the default Google Colab instance.
 
