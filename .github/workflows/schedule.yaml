@@ -1,17 +1,17 @@
-name: Schedule
+#name: Schedule
 
-on:
-  schedule:
-    - cron: "0 * * * *"
+#on:
+#  schedule:
+#    - cron: "0 * * * *"
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v2
+#    steps:
+#    - uses: actions/checkout@v2
 
-    - name: Compute most visited
-      run: |
-        cd bash
-        ./run.sh
+#    - name: Compute most visited
+#      run: |
+#        cd bash
+#        ./run.sh
