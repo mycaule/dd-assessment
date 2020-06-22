@@ -1,4 +1,5 @@
 #name: Schedule
+# disabled due to GitHub free account billing limitations
 
 #on:
 #  schedule:
